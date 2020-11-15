@@ -1,0 +1,14 @@
+input x
+input y
+result := 0
+change := -1
+if y < 0 goto 7
+goto 9
+change := 1
+x := x * -1
+if y == 0 goto 13
+result := result + x
+y := y + change
+goto 9
+print result
+halt

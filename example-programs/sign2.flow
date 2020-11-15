@@ -1,0 +1,6 @@
+x := 1
+if x == 0 goto 6
+print x
+x := x * -1
+goto 2
+halt

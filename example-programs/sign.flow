@@ -1,0 +1,10 @@
+w := 0
+input x
+input y
+z := x - y
+result := w * z
+if result == 0 goto 9
+z := z + 1
+goto 6
+print result
+halt
