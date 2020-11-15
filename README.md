@@ -88,7 +88,7 @@ flow dot [OPTIONS] [PROGRAM]
 
 ## Extending the implementation
 
-If you want to extend the implementation, to add an analysis, here are some
+If you want to extend the implementation to add an analysis, here are some
 recommendations:
 
 + Add the code for the analysis in the `Semantics` folder.
