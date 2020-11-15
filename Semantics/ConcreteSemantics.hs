@@ -45,7 +45,8 @@ doStatement p (l, σ) =
     (Print x) -> do print (resolve x σ)
                     return (l + 1, σ)
 
-    (Input x) -> do n <- read <$> getLine
+    (Input x) -> do putStr "type a number: "
+                    n <- read <$> getLine
                     return (l+1, σ // [x ↦ n])
 
     (Assign     x t) -> return (l+1, σ // [x ↦ evalTerm t σ])
