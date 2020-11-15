@@ -24,6 +24,8 @@ For example, to run the program `example-programs/small.flow`, use the command:
 runhaskell flow.hs example-programs/small.flow
 ```
 
+If you don't provide a filename, `flow` will read from `stdin`.
+
 _(You can also compile the program with `ghc -O flow.hs`, then use `./flow` instead of
 `runhaskell flow.hs`)_
 
