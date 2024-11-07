@@ -4,11 +4,11 @@ This repository contains a reference implementation of the _flow_ language.
 
 ## Requirements
 
-To run the code, it's best to use the CS 131 Docker image. If you want to run it on your
+To run the code, it's best to use the CS 131 server. If you want to run it on your
 own machine, here is a list of the libraries you will need:
 
-+ [`parsec`](https://hackage.haskell.org/package/parsec) (for parsing)
-+ [`cmdargs`](https://hackage.haskell.org/package/cmdargs) (for processing command-line arguments)
+- [`parsec`](https://hackage.haskell.org/package/parsec) (for parsing)
+- [`cmdargs`](https://hackage.haskell.org/package/cmdargs) (for processing command-line arguments)
 
 ## Running programs
 
@@ -57,8 +57,7 @@ runhaskell flow.hs dot example-programs/small.flow | dot -Tpng > out.png
 ```
 
 This command will create a file `out.png` that contains a picture of the program's
-control-flow graph. You should be able to open `out.png` on your computer, or in Visual
-Studio Code.
+control-flow graph. You should be able to open `out.png` in Visual Studio Code.
 
 ## The `flow` program
 
@@ -69,6 +68,7 @@ runhaskell flow.hs --help
 ```
 
 which gives the following output:
+
 ```
 The flow program
 
@@ -93,11 +93,11 @@ flow dot [OPTIONS] [PROGRAM]
 If you want to extend the implementation to add an analysis, here are some
 recommendations:
 
-+ Add the code for the analysis in the `Semantics` folder.
-+ Take inspiration from the concrete semantics in `Semantics/ConcreteSemantics.hs`.
-+ The file `Semantics/Domains.hs` has some helper functions and data structures for stores
+- Add the code for the analysis in the `Semantics` folder.
+- Take inspiration from the concrete semantics in `Semantics/ConcreteSemantics.hs`.
+- The file `Semantics/Domains.hs` has some helper functions and data structures for stores
   and lattices.
-+ You can add the analysis to the `flow` program, by adding an `analysis` mode. It's
+- You can add the analysis to the `flow` program, by adding an `analysis` mode. It's
   probably good to ask for help on this.
-+ If you want to add a program transformation that uses the results of your analysis, you
+- If you want to add a program transformation that uses the results of your analysis, you
   probably want to create a new module and add a `transform` mode to the `flow` program.
