@@ -5,3 +5,4 @@ flow
 **/*.i
 *.png
 **/*.png
+*.hi
