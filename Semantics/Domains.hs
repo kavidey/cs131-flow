@@ -14,6 +14,7 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.Maybe
 import Data.List
+import Debug.Trace
 
 -----------------------------------------------------------------------------------------
 -- * Concrete domains
@@ -211,6 +212,9 @@ instance Eq a => ValueStore (FlatLattice a) where
 -- | A flat Bool lattice
 type AbstractBool = FlatLattice Bool
 
+-- | A flat Integer lattice
+type AbstractInt = FlatLattice Integer
+
 -- | Repeatedly apply a function to a value until it reaches a fixpoint
-fixpoint :: Eq a => (a -> a) -> a -> a
-fixpoint f x = let x' = f x in if x' == x then x else f x'
+fixpoint :: Eq a => Show a => (a -> a) -> a -> a
+fixpoint f x = let x' = f x in if x' == x then x else fixpoint f x'

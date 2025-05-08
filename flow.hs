@@ -5,6 +5,7 @@ module Main where
 import Parser.Parser (parseFile, parseNamed)
 import AbstractSyntax.AST
 import Semantics.ConcreteSemantics
+import Semantics.AbstractSemantics
 import Semantics.Dot
 import Semantics.Domains
 
@@ -20,6 +21,7 @@ import Control.Monad
 -----------------------------------------------------------------------------------------
 data FlowArgs = Run { file :: FilePath, show_store :: Bool }
               | Dot { file :: FilePath }
+              | Analysis { file :: FilePath }
   deriving (Show, Data, Typeable)
 
 -- flow [run] [PROGRAM]
@@ -34,7 +36,12 @@ dotArgs :: FlowArgs
 dotArgs =  Dot { file = def &= argPos 0 &= typ "PROGRAM" &= opt "" }  
         &= help "Render the program in dot notation"
 
-mode = modes [runArgs, dotArgs] 
+-- flow dot [PROGRAM]
+analysisArgs :: FlowArgs
+analysisArgs =  Analysis { file = def &= argPos 0 &= typ "PROGRAM" &= opt "" }  
+        &= help "Render the program in dot notation"
+
+mode = modes [runArgs, dotArgs, analysisArgs] 
      &= program "flow"
      &= help "The flow programming language"
 
@@ -52,6 +59,12 @@ runProgram program displayStore =
 -----------------------------------------------------------------------------------------
 printDot :: Program -> IO ()
 printDot = putStrLn . makeDot
+
+-----------------------------------------------------------------------------------------
+--  Analyze a program and display it
+-----------------------------------------------------------------------------------------
+printAnalysis :: Program -> IO ()
+printAnalysis = putStr . doAnalysis
 
 -----------------------------------------------------------------------------------------
 -- Main 
@@ -72,3 +85,4 @@ main = do
           case args of
             Run{} -> runProgram program (show_store args)
             Dot{} -> printDot program
+            Analysis{} -> printAnalysis program
