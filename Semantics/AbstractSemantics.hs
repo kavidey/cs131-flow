@@ -20,6 +20,7 @@ initialStore :: AbstractStore
 initialStore = emptyStore
 
 -- | Produce an analysis of the program
+-- | Recursively apply the analysis step function until a fixed point is reached
 doAnalysis :: Program -> String
 doAnalysis p = unlines $ map formatLine $ Map.toList . fst $ analysis
    where
@@ -27,6 +28,7 @@ doAnalysis p = unlines $ map formatLine $ Map.toList . fst $ analysis
       analysisn = iterate (doAnalysisStep p) (Map.fromList [(1, emptyStore)], Set.fromList [1]) !! 10
       formatLine (lineNo, abstractStore) = fmt lineNo ++ " " ++ show abstractStore
 
+-- | Step forward each branch of analysis one step and merge the results
 doAnalysisStep :: Program -> StepState -> StepState
 doAnalysisStep p (s, ls) = foldl combineSteps (Map.empty, Set.empty) (map (doAnalysisSingleStep p s) $ Set.toList ls)
    
@@ -36,6 +38,7 @@ doAnalysisStep p (s, ls) = foldl combineSteps (Map.empty, Set.empty) (map (doAna
 combineSteps :: StepState -> StepState -> StepState
 combineSteps (a1, l1) (a2, l2) = (Map.unionWith join a1 a2, Set.union l1 l2)
 
+-- | Step forward a single branch of analysis by one step
 doAnalysisSingleStep :: Program -> AbstractState -> LineNumber -> StepState
 doAnalysisSingleStep p s l =
    case getStatement p l of
@@ -53,13 +56,13 @@ doAnalysisSingleStep p s l =
       
       (AssignExpr x e) -> transition s [x ↦ analyzeExpr e lineStore] (l+1)
 
-      (If c l') -> if condResult /= (⊤) then 
+      (If c l') -> if condResult /= (⊤) then
             if expandCond condResult then transition s [] l'
             else transition s [] (l+1)
          else combineSteps (transition s [] l') (transition s [] (l+1))
          where
             condResult = abstractCond c lineStore
-            expandCond (Element b) = b
+            expandCond (Element b) = b -- pull out the boolean value of the
 
    where
       -- generate transition to the next line (add the current store to the store for the next line, and make a list of the next lines)
@@ -110,6 +113,7 @@ abstractCond (Cond x LessThan t)       σ = if l /= (⊤) && r /= (⊤) && l /= 
    where 
       l = resolve x σ
       r = analyzeTerm t σ
+
 -----------------------------------------------------------------------------------------
 -- * Helper functions
 -----------------------------------------------------------------------------------------
