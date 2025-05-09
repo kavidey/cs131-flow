@@ -14,7 +14,6 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.Maybe
 import Data.List
-import Debug.Trace
 
 -----------------------------------------------------------------------------------------
 -- * Concrete domains
@@ -216,5 +215,10 @@ type AbstractBool = FlatLattice Bool
 type AbstractInt = FlatLattice Integer
 
 -- | Repeatedly apply a function to a value until it reaches a fixpoint
-fixpoint :: Eq a => Show a => (a -> a) -> a -> a
+fixpoint :: Eq a => (a -> a) -> a -> a
 fixpoint f x = let x' = f x in if x' == x then x else fixpoint f x'
+
+-- | Repeatedly apply a function to a value until it reaches a fixpoint
+-- | A fix point is detected using a user-inputted equality checker
+fixpointCustomEquality :: (a -> a -> Bool) -> (a -> a) -> a -> a
+fixpointCustomEquality e f x = let x' = f x in if e x' x then x else fixpointCustomEquality e f x'
